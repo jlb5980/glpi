@@ -30,20 +30,6 @@
  * ---------------------------------------------------------------------
  */
 
-function displayUsage() {
-   die("\nusage: ".$_SERVER['argv'][0]." [ --host=<dbhost> ] --db=<dbname> --user=<dbuser> [ --pass[=<dbpassword>] ] [ --lang=xx_XX] [ --tests ] [ --force ]\n\n");
-}
-
-$args = [ 'host' => 'localhost', 'pass' => ''];
-
-if ($_SERVER['argc']>1) {
-   for ($i=1; $i<count($_SERVER['argv']); $i++) {
-      $it           = explode("=", $argv[$i], 2);
-      $it[0]        = preg_replace('/^--/', '', $it[0]);
-      $args[$it[0]] = (isset($it[1]) ? $it[1] : true);
-   }
-}
-
 define('GLPI_ROOT', dirname(__DIR__));
 chdir(GLPI_ROOT);
 
@@ -60,8 +46,33 @@ $GLPI->initLogger();
 
 Config::detectRootDoc();
 
+try {
+  $opts = new \Zend\Console\Getopt([
+      'help'     => 'Display usage',
+      'host|h=s' => 'Machine hosting the database',
+      'db|d=s'   => 'Database name',
+      'user|u=s' => 'Database user',
+      'pass|p-s' => 'Database password (default: no password)',
+      'lang|l=s' => 'Default locale',
+      'tests|t'  => 'Test configuration',
+      'force|f'  => 'Override existing configuration',
+]);
+    $opts->parse();
+} catch (Zend\Console\Exception\RuntimeException $e) {
+    echo $e->getUsageMessage();
+    exit;
+}
+$args = $opts->getArguments();
+if (!isset($args['host'])) {
+   $args['host'] = 'localhost';
+}
+if (!isset($args['pass'])) {
+   $args['pass'] = '';
+}
+
 if (isset($args['help']) || !(isset($args['db']) && isset($args['user']))) {
-   displayUsage();
+   echo $opts->getUsageMessage();
+   exit;
 }
 
 if (isset($args['lang']) && !isset($CFG_GLPI['languages'][$args['lang']])) {
