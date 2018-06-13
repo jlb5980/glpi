@@ -31,7 +31,7 @@
  */
 
 function displayUsage() {
-   die("\nusage: ".$_SERVER['argv'][0]." [ --host=<dbhost> ] --db=<dbname> --user=<dbuser> [ --pass=<dbpassword> ] [ --lang=xx_XX] [ --tests ] [ --force ]\n\n");
+   die("\nusage: ".$_SERVER['argv'][0]." [ --host=<dbhost> ] --db=<dbname> --user=<dbuser> [ --pass[=<dbpassword>] ] [ --lang=xx_XX] [ --tests ] [ --force ]\n\n");
 }
 
 $args = [ 'host' => 'localhost', 'pass' => ''];
@@ -77,6 +77,10 @@ if (file_exists(GLPI_CONFIG_DIR . '/config_db.php') && !isset($args['force'])) {
 
 $_SESSION = ['glpilanguage' => (isset($args['lang']) ? $args['lang'] : 'en_GB')];
 Toolbox::setDebugMode(Session::DEBUG_MODE, 0, 0, 1);
+
+if ($args['pass'] === true) {
+   $args['pass'] = \Zend\Console\Prompt\Password::prompt('Password:');
+}
 
 echo "Connect to the DB...\n";
 
