@@ -33,7 +33,7 @@
 define('GLPI_ROOT', dirname(__DIR__));
 chdir(GLPI_ROOT);
 
-if (isset($args['tests'])) {
+if (in_array('--tests', $_SERVER['argv'])) { // Uggly, but must be before any other GLPI include, so not from Getopt
    define("GLPI_CONFIG_DIR", GLPI_ROOT . "/tests");
    @mkdir(GLPI_CONFIG_DIR . '/files/_log', 0775, true);
 }
@@ -54,7 +54,7 @@ try {
       'user|u=s' => 'Database user',
       'pass|p-s' => 'Database password (default: no password) without value will be prompt',
       'lang|l=s' => 'Default locale',
-      'tests|t'  => 'Test configuration',
+      'tests'    => 'Test configuration',
       'force|f'  => 'Override existing configuration',
 ]);
     $opts->parse();
