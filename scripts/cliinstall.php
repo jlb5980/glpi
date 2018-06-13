@@ -47,7 +47,7 @@ $GLPI->initLogger();
 Config::detectRootDoc();
 
 try {
-  $opts = new \Zend\Console\Getopt([
+   $opts = new \Zend\Console\Getopt([
       'help'     => 'Display usage',
       'host|h=s' => 'Machine hosting the database',
       'db|d=s'   => 'Database name',
@@ -56,8 +56,8 @@ try {
       'lang|l=s' => 'Default locale',
       'tests'    => 'Test configuration',
       'force|f'  => 'Override existing configuration',
-]);
-    $opts->parse();
+   ]);
+   $opts->parse();
 } catch (Zend\Console\Exception\RuntimeException $e) {
     echo $e->getUsageMessage();
     exit;
