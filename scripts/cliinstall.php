@@ -52,7 +52,7 @@ try {
       'host|h=s' => 'Machine hosting the database',
       'db|d=s'   => 'Database name',
       'user|u=s' => 'Database user',
-      'pass|p-s' => 'Database password (default: no password)',
+      'pass|p-s' => 'Database password (default: no password) without value will be prompt',
       'lang|l=s' => 'Default locale',
       'tests|t'  => 'Test configuration',
       'force|f'  => 'Override existing configuration',
